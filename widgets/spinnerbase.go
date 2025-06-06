@@ -33,8 +33,8 @@ type SpinnerBase struct {
 // Returns:
 //
 //	A new SpinnerBase widget.
-func NewSpinnerBase(min, max, step float64) *SpinnerBase {
-	s := &SpinnerBase{Min: min, Max: max, Step: step, Value: min}
+func NewSpinnerBase(sp Spinnable, min, max, step float64) *SpinnerBase {
+	s := &SpinnerBase{spinner: sp, Min: min, Max: max, Step: step, Value: min}
 	s.ExtendBaseWidget(s)
 	return s
 }
@@ -43,4 +43,10 @@ func NewSpinnerBase(min, max, step float64) *SpinnerBase {
 // renderer.
 func (s *SpinnerBase) CreateRenderer() fyne.WidgetRenderer {
 	return s.spinner.CreateRenderer()
+}
+
+func (s *SpinnerBase) clampValueToRange() {
+	if s.Value > s.Max {
+		s.Value = s.Max
+	}
 }
