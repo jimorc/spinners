@@ -48,15 +48,24 @@ func (s *SpinnerBase) CreateRenderer() fyne.WidgetRenderer {
 
 // SetValue sets the Value field and ensures that it is between Min and Max.
 func (s *SpinnerBase) SetValue(value float64) {
-	s.Value = value
-	s.clampValueToRange()
+	if value == s.Value {
+		return
+	}
+	s.Value = s.clampValue(value)
 	s.spinner.Refresh()
 }
 
+// clampValueToRange ensures Value is clamped between Min and Max.
 func (s *SpinnerBase) clampValueToRange() {
-	if s.Value > s.Max {
-		s.Value = s.Max
-	} else if s.Value < s.Min {
-		s.Value = s.Min
+	s.Value = s.clampValue(s.Value)
+}
+
+// clampValue returns a value that is clamped between Min and Max.
+func (s *SpinnerBase) clampValue(value float64) float64 {
+	if value > s.Max {
+		value = s.Max
+	} else if value < s.Min {
+		value = s.Min
 	}
+	return value
 }

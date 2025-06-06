@@ -7,6 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var refreshCalled bool = false
+
 type spinner struct {
 	SpinnerBase
 }
@@ -23,7 +25,9 @@ func (s *spinner) MinSize() fyne.Size {
 	return fyne.Size{}
 }
 
-func (s *spinner) Refresh() {}
+func (s *spinner) Refresh() {
+	refreshCalled = true
+}
 
 func TestSpinnerBase_NewSpinnerBase(t *testing.T) {
 	sp := &spinner{}
@@ -74,12 +78,25 @@ func TestSpinnerBase_clampValueToRange_LessThanMin(t *testing.T) {
 func TestSpinnerBase_SetValue(t *testing.T) {
 	sp := &spinner{}
 	s := NewSpinnerBase(sp, 2, 4, 1)
+	refreshCalled = false
 	s.SetValue(3.)
 	assert.Equal(t, 3., s.Value)
+	assert.True(t, refreshCalled)
 
+	refreshCalled = false
 	s.SetValue(5.)
 	assert.Equal(t, 4., s.Value)
 
+	refreshCalled = false
 	s.SetValue(-1.)
 	assert.Equal(t, 2., s.Value)
+}
+
+func TestSpinnerBase_SetValue_ValuesEqual(t *testing.T) {
+	sp := &spinner{}
+	s := NewSpinnerBase(sp, 2, 4, 1)
+	refreshCalled = false
+	s.SetValue(2.)
+	assert.Equal(t, 2., s.Value)
+	assert.False(t, refreshCalled)
 }
