@@ -5,14 +5,20 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+// Spinnable is an interface for specifying if a widget is spinnable (i.e. is a spinner).
+type Spinnable interface {
+	CreateRenderer() fyne.WidgetRenderer
+}
+
 // SpinnerBase is the base widget for all spinner widgets.
 type SpinnerBase struct {
 	widget.DisableableWidget
 
-	Value float64
-	Min   float64
-	Max   float64
-	Step  float64
+	spinner Spinnable
+	Value   float64
+	Min     float64
+	Max     float64
+	Step    float64
 }
 
 // NewSpinnerBase iniitializes a new SpinnerBase widget. This function should only be
@@ -36,5 +42,5 @@ func NewSpinnerBase(min, max, step float64) *SpinnerBase {
 // CreateRenderer is a private method to fyne which links this widget to its
 // renderer.
 func (s *SpinnerBase) CreateRenderer() fyne.WidgetRenderer {
-	return nil
+	return s.spinner.CreateRenderer()
 }
