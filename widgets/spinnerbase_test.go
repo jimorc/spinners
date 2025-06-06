@@ -70,3 +70,16 @@ func TestSpinnerBase_clampValueToRange_LessThanMin(t *testing.T) {
 	s.clampValueToRange()
 	assert.Equal(t, 2., s.Value)
 }
+
+func TestSpinnerBase_SetValue(t *testing.T) {
+	sp := &spinner{}
+	s := NewSpinnerBase(sp, 2, 4, 1)
+	s.SetValue(3.)
+	assert.Equal(t, 3., s.Value)
+
+	s.SetValue(5.)
+	assert.Equal(t, 4., s.Value)
+
+	s.SetValue(-1.)
+	assert.Equal(t, 2., s.Value)
+}

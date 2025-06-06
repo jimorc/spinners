@@ -8,6 +8,7 @@ import (
 // Spinnable is an interface for specifying if a widget is spinnable (i.e. is a spinner).
 type Spinnable interface {
 	CreateRenderer() fyne.WidgetRenderer
+	Refresh()
 }
 
 // SpinnerBase is the base widget for all spinner widgets.
@@ -43,6 +44,13 @@ func NewSpinnerBase(sp Spinnable, min, max, step float64) *SpinnerBase {
 // renderer.
 func (s *SpinnerBase) CreateRenderer() fyne.WidgetRenderer {
 	return s.spinner.CreateRenderer()
+}
+
+// SetValue sets the Value field and ensures that it is between Min and Max.
+func (s *SpinnerBase) SetValue(value float64) {
+	s.Value = value
+	s.clampValueToRange()
+	s.spinner.Refresh()
 }
 
 func (s *SpinnerBase) clampValueToRange() {
