@@ -48,5 +48,7 @@ func (s *SpinnerBase) CreateRenderer() fyne.WidgetRenderer {
 func (s *SpinnerBase) clampValueToRange() {
 	if s.Value > s.Max {
 		s.Value = s.Max
+	} else if s.Value < s.Min {
+		s.Value = s.Min
 	}
 }
